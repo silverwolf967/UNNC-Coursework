@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+    branches: main
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Prepare input
@@ -31,9 +31,16 @@ jobs:
         id: compile
         shell: bash
         run: |
-          cd ./
+          # 检查目录结构
+          echo "当前目录结构:"
+          ls -la
+          echo ""
+          echo "Advanced_DataStruct_Temp 目录内容:"
+          ls -la Advanced_DataStruct_Temp/
+          
+          # 编译
           start_time=$(date +%s%3N)
-          javac -encoding UTF-8 -sourcepath . AVL.java
+          javac -encoding UTF-8 -sourcepath . Advanced_DataStruct_Temp/AVL.java
           end_time=$(date +%s%3N)
           compile_time=$((end_time - start_time))
           echo "compile_time_ms=$compile_time" >> $GITHUB_OUTPUT
@@ -43,9 +50,13 @@ jobs:
         id: run
         shell: bash
         run: |
-          cd ./
+          # 检查编译结果
+          echo "编译后的文件:"
+          find . -name "*.class" -type f
+          
+          # 运行程序
           start_time=$(date +%s%3N)
-          java -Dfile.encoding=UTF-8 -XX:+UseSerialGC -Xss64m -Xms1920m -Xmx1920m AVL < ../Input.txt > ../Output.txt
+          java -Dfile.encoding=UTF-8 -XX:+UseSerialGC -Xss64m -Xms1920m -Xmx1920m -cp . Advanced_DataStruct_Temp/AVL < Input.txt > Output.txt
           end_time=$(date +%s%3N)
           run_time=$((end_time - start_time))
           echo "run_time_ms=$run_time" >> $GITHUB_OUTPUT
