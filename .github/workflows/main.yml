@@ -40,7 +40,7 @@ jobs:
           
           # 编译
           start_time=$(date +%s%3N)
-          javac -encoding UTF-8 -sourcepath . Advanced_DataStruct_Temp/AVL.java
+          javac -encoding UTF-8 -sourcepath . AVL.java
           end_time=$(date +%s%3N)
           compile_time=$((end_time - start_time))
           echo "compile_time_ms=$compile_time" >> $GITHUB_OUTPUT
